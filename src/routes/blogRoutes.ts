@@ -104,7 +104,7 @@ router.get('/:id', authenticateToken, getSingleBlog);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *          multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -112,6 +112,7 @@ router.get('/:id', authenticateToken, getSingleBlog);
  *                 type: string
  *               image:
  *                 type: string
+ *                 format: binary
  *               description:
  *                 type: string
  *     responses:

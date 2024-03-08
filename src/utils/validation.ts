@@ -18,7 +18,8 @@ export const loginSchema = Joi.object({
 
 export const blogSchema = Joi.object({
     title: Joi.string().required(),
-    description: Joi.string().required()
+    description: Joi.string().required(),
+    image: Joi.string().required(),
 });
 
 export const contactSchema = Joi.object({
