@@ -32,11 +32,6 @@ app.use('/users', userRoutes);
 app.use('/likes', likeRoutes);
 app.use('/comments', commentRoutes);
  //app.use('/subscribe', subscribeRoutes);
- app.use('/', (req, res) => {
-  return res.json({
-    message: "Welcome to My Brand"
-  });
- });
 
 // Swagger setup
 const swaggerOptions = {
@@ -51,6 +46,10 @@ const swaggerOptions = {
         {
           url: `http://localhost:${PORT}`,
           description: '',
+        },
+        {
+          url: `https://api-furahax.onrender.com`,
+          description: 'Server deployed',
         },
       ],
       components: {
@@ -70,7 +69,7 @@ const swaggerOptions = {
   
   // Swagger setup
   const swaggerSpec = swaggerJsdoc(swaggerOptions);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Connect to MongoDB
 const mongoURI = process.env.MONGODB_URI;
