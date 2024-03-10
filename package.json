@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
-    "build": "tsc -p"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.1",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.12",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },
