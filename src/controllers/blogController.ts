@@ -29,8 +29,6 @@ const upload = multer({ storage: storage });
 
 export const createBlog = async (req: Request, res: Response) => {
   try {
-    console.log(req);
-    
     upload.single("image")(req, res, async function (err: any) {
       if (err) {
         return res.status(400).json({ message: "Error uploading image" });
@@ -38,10 +36,12 @@ export const createBlog = async (req: Request, res: Response) => {
 
       const { error } = blogSchema.validate(req.body);
       if (error) {
+        console.log(error);
         return res.status(400).json({ message: error.details[0].message });
       }
 
       const { title, description } = req.body;
+      // console.log(title);
       const file: any = req.file;
       const newBlog = new Blog({
         title: title,
@@ -96,9 +96,6 @@ export const updateBlog = async (req: Request, res: Response) => {
             if (err) {
                 return res.status(400).json({ message: "Error uploading image" });
             }
-
-           
-
             const { title, description } = req.body;
             const file: any = req.file;
             const updatedFields: any = {

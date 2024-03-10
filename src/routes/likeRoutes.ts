@@ -1,5 +1,6 @@
 import express from 'express';
 import { likePost, getLikesForPost} from '../controllers/likeController';
+import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/:id', likePost);
+router.post('/:id', authenticateToken, likePost);
 
 /**
  * @swagger
