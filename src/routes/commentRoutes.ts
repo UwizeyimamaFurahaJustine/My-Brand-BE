@@ -1,5 +1,6 @@
 import express from 'express';
-import { addComment, getCommentsForPost } from '../controllers/commentController';
+import { addComment, getCommentsForBlog } from '../controllers/commentController';
+import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -37,7 +38,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/:id', addComment);
+router.post('/:id',authenticateToken, addComment);
 
 /**
  * @swagger
@@ -60,6 +61,6 @@ router.post('/:id', addComment);
  *       500:
  *         description: Internal server error
  */
-router.get('/:id', getCommentsForPost);
+router.get('/:id',authenticateToken, getCommentsForBlog);
 
 export default router;

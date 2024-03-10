@@ -18,10 +18,11 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: any) =>
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    jwt.verify(token, jwtSecret, (err, user) => {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
         if (err) {
             return res.status(403).json({ message: 'Forbidden' });
         }
+        const user= decodedToken;
         req.user = user;
         next();
     });

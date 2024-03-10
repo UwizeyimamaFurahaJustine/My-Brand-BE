@@ -1,60 +1,65 @@
 import { Request, Response } from 'express';
-import {Blog} from '../models/Blog';
+import { Comment } from '../models/Comment';
+import { Blog } from '../models/Blog';
 
 
 interface AuthRequest extends Request {
-    user?: any; // Define the user property
+    user?: { id: string; username: string }; // Define the user property with proper typing
 }
 
 export const addComment = async (req: AuthRequest, res: Response) => {
     try {
-  
-        const { id } = req.params;
+        console.log(req);
+        
         const { text } = req.body;
-        const userId = req.user.email; // Use the user's ObjectId instead of email
+        const { id: blogId } = req.params; // Extract blogId from request parameters
+        const username = req.user?.username; // Fetch username from req.user
 
-        console.log(`Received comment request for blog ID: ${id}`);
-        console.log(`Comment text: ${text}`);
-        console.log(`User ID: ${userId}`);
-
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            console.log(`Blog post not found with ID: ${id}`);
-            return res.status(404).json({ message: 'Blog post not found' });
+        if (!text || !blogId || !username) { // Check if username exists
+            return res.status(400).json({ message: 'Text field, blogId, and username are required' });
         }
 
-        blog.comments.push({ text, user: userId }); // Populate user with ObjectId
-        await blog.save();
+        const comment = new Comment({
+            text,
+            user: username,
+            blog: blogId,
+        });
 
-        console.log('Comment added successfully');
-        res.json({ message: 'Comment added successfully' });
-    } catch (err) {
-        console.error('Error adding comment:', err);
-        res.status(500).json({ message: 'Internal server error' });
+        await comment.save();
+
+        await Blog.findByIdAndUpdate(blogId, { $inc: { commentsNo: 1 } });
+
+        res.status(201).json({ message: 'Comment added successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
 
 
 
-
-
-
-
-export const getCommentsForPost = async (req: Request, res: Response) => {
+export const getCommentsForBlog = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        const { id: blogId } = req.params;
 
-        // Find the blog post and populate the comments field
-        const blog = await Blog.findById(id).populate('comments.user');
+        console.log('Requested blogId:', blogId);
+
+        const blog = await Blog.findById(blogId);
         if (!blog) {
-            return res.status(404).json({ message: 'Blog post not found' });
+            console.log('Blog not found for blogId:', blogId);
+            return res.status(404).json({ message: 'Blog not found' });
         }
 
-        res.json(blog.comments);
-    } catch (err) {
-        console.error('Error getting comments:', err);
-        res.status(500).json({ message: 'Internal server error' });
+        const comments = await Comment.find({ blog: blogId }).populate('user', 'username');
+        if (!comments || comments.length === 0) {
+            return res.status(404).json({ message: 'No comments found for this blog' });
+        }
+
+        res.json(comments);
+    } catch (error) {
+        console.error('Error retrieving blog comments:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
@@ -67,6 +72,22 @@ export const getCommentsForPost = async (req: Request, res: Response) => {
 
 
 
+export const deleteComment = async (req: Request, res: Response) => {
+    try {
+        const { commentId } = req.params;
 
+        const comment = await Comment.findByIdAndDelete(commentId);
 
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
 
+        // Update commentsCount in Blog model
+        await Blog.findByIdAndUpdate(comment.blog, { $inc: { commentsCount: -1 } });
+
+        res.json({ message: 'Comment deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};

@@ -29,6 +29,8 @@ const upload = multer({ storage: storage });
 
 export const createBlog = async (req: Request, res: Response) => {
   try {
+    console.log(req);
+    
     upload.single("image")(req, res, async function (err: any) {
       if (err) {
         return res.status(400).json({ message: "Error uploading image" });

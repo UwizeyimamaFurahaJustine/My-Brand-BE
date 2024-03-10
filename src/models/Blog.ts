@@ -6,7 +6,7 @@ interface IBlog extends Document {
     image: string;
     likesCount: number;
     likes: mongoose.Types.ObjectId[]; // Change type to mongoose.Types.ObjectId[]
-    comments: Array<{ text: string; user: mongoose.Types.ObjectId }>; // Change user type to mongoose.Types.ObjectId
+    commentsNo: number; 
  
 }
 
@@ -16,7 +16,7 @@ const BlogSchema = new Schema({
     image: {type: String, required: true},
     likesCount: { type: Number, default: 0, required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
-    comments: [{ text: String, user: { type: Schema.Types.ObjectId, ref: 'User', required: true } }],
+    commentsNo: { type: Number, default: 0, required: true } 
    
 });
 
