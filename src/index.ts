@@ -11,13 +11,13 @@ import commentRoutes from './routes/commentRoutes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import cors from 'cors';
-// import subscriptionRoutes from './routes/subscriptionRoutes'
+//import subscribeRoutes from './routes/subscribeRoutes'
 
 
 dotenv.config();
 
  const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors());
@@ -31,7 +31,12 @@ app.use('/messages', messageRoutes);
 app.use('/users', userRoutes);
 app.use('/likes', likeRoutes);
 app.use('/comments', commentRoutes);
-// app.use('/api/subscribe', subscriptionRoutes);
+ //app.use('/subscribe', subscribeRoutes);
+ app.use('/', (req, res) => {
+  return res.json({
+    message: "Welcome to My Brand"
+  });
+ });
 
 // Swagger setup
 const swaggerOptions = {
