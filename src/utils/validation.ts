@@ -20,6 +20,12 @@ export const blogSchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
 });
+export const subscribeSchema = Joi.object({
+    email: Joi.string().regex(/^\S+@\S+\.\S{2,}$/).lowercase().required().messages({
+        'string.pattern.base': 'Please enter a valid email address in the format name@example.example',
+    }),
+    
+});
 
 export const contactSchema = Joi.object({
     name: Joi.string().required(),

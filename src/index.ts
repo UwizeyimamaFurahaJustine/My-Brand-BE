@@ -11,12 +11,12 @@ import commentRoutes from './routes/commentRoutes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import cors from 'cors';
-//import subscribeRoutes from './routes/subscribeRoutes'
+import subscribeRoutes from './routes/subscribeRoutes'
 
 
 dotenv.config();
 
- const app = express();
+ export const app = express();
 const PORT = process.env.PORT;
 
 // Middleware
@@ -31,7 +31,7 @@ app.use('/messages', messageRoutes);
 app.use('/users', userRoutes);
 app.use('/likes', likeRoutes);
 app.use('/comments', commentRoutes);
- //app.use('/subscribe', subscribeRoutes);
+app.use('/subscribe', subscribeRoutes);
 
 // Swagger setup
 const swaggerOptions = {

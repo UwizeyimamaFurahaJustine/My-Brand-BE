@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUsers, updateUser } from '../controllers/userController';
+import { getUsers, updateUser, deleteUser } from '../controllers/userController';
 import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -67,5 +67,30 @@ router.get('/', authenticateToken, authorizeAdmin, getUsers);
  */
 
 router.put('/:id', authenticateToken, authorizeAdmin, updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Users]
+ *     description: Delete an existing user with the provided ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user
+ *     responses:
+ *       200:
+ *         description: User deleted
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.delete('/:id', authenticateToken, authorizeAdmin, deleteUser);
 
 export default router;

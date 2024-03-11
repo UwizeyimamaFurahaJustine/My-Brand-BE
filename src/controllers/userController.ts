@@ -34,3 +34,16 @@ export const updateUser = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+// Delete a user by ID
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ message: "User deleted" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
