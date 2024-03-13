@@ -17,20 +17,26 @@ const router = express.Router();
  *   post:
  *     summary: Add a comment to a blog post
  *     tags: [Comments]
+ *     description: The ID of the blog post to comment on.
  *     parameters:
  *       - in: path
  *         name: id
+ *         description: ID of the blog to like
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the blog post to comment on
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Comment'
- *     responses:
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
+ *     responses:       
  *       201:
  *         description: Comment added successfully
  *       404:
@@ -38,21 +44,25 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
+
 router.post('/:id',authenticateToken, addComment);
 
 /**
  * @swagger
- * /api/comments/{id}:
+ * /comments/{id}:
  *   get:
  *     summary: Get all comments for a blog post
  *     tags: [Comments]
+ *     description: Retrieve a list of all comments.
  *     parameters:
  *       - in: path
  *         name: id
+ *         description: ID of the blog to like
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the blog post
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of comments on the blog post

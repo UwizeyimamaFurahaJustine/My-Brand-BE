@@ -9,7 +9,7 @@ interface AuthRequest extends Request {
 
 export const addComment = async (req: AuthRequest, res: Response) => {
     try {
-        console.log(req);
+        // console.log(req);
         
         const { text } = req.body;
         const { id: blogId } = req.params; // Extract blogId from request parameters

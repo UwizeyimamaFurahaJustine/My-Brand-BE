@@ -6,12 +6,6 @@ import path from "path";
 // import Subscription from '../models/subscriptionModel';
 // import { sendEmailToSubscribers } from '../services/emailService';
 
-// cloudinary.config({
-//     cloud_name: process.env.CLOUD_NAME || 'your_cloud_name',
-//     api_key: process.env.API_KEY || 'your_api_key',
-//     api_secret: process.env.API_SECRET || 'your_api_secret'
-// });
-
 // Set up storage for image uploads
 const storage = multer.diskStorage({
   destination: function (req: Request, file: any, cb: Function) {
