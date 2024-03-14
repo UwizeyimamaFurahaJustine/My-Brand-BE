@@ -1,6 +1,6 @@
 import express from 'express';
 import { addComment, getCommentsForBlog } from '../controllers/commentController';
-import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
+import { authenticateToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ const router = express.Router();
  *   post:
  *     summary: Add a comment to a blog post
  *     tags: [Comments]
+ *     description: Add comment on blog.
  *     parameters:
  *       - in: path
  *         name: id
@@ -29,7 +30,10 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Comment'
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Comment added successfully
@@ -42,10 +46,11 @@ router.post('/:id',authenticateToken, addComment);
 
 /**
  * @swagger
- * /api/comments/{id}:
+ * /comments/{id}:
  *   get:
  *     summary: Get all comments for a blog post
  *     tags: [Comments]
+ *     description: Get all the comments for a blog.
  *     parameters:
  *       - in: path
  *         name: id

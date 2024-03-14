@@ -59,4 +59,4 @@ router.post('/', sendMessage);
 
 router.get('/', authenticateToken, authorizeAdmin, getMessages);
 
-export default router;
+export default router; 

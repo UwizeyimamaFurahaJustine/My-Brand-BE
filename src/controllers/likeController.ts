@@ -15,7 +15,7 @@ export const likePost = async (req: AuthRequest, res: Response) => {
         const email = req.user?.email;
         const user = await User.findOne({ email }); // find user by their email 
         
-        console.log(user);
+        
         const userId = user;
         const username = req.user?.username;
 
@@ -31,7 +31,7 @@ export const likePost = async (req: AuthRequest, res: Response) => {
         const newLike = new Like({ user: userId, username, blog: blogId });
         await newLike.save();
 
-        await Blog.findByIdAndUpdate(blogId, { $inc: { likesCount: 1 } });
+        await Blog.findByIdAndUpdate(blogId, { $inc: { likesNo: 1 } });
 
         res.json({ message: 'Blog post liked successfully' });
     } catch (err) {
@@ -40,25 +40,25 @@ export const likePost = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const unlikePost = async (req: AuthRequest, res: Response) => {
-    try {
-        const { id } = req.params;
-        const userId = req.user?.email;
+// export const unlikePost = async (req: AuthRequest, res: Response) => {
+//     try {
+//         const { id } = req.params;
+//         const userId = req.user?.email;
 
-        if (!userId) {
-            return res.status(400).json({ message: 'User not authenticated' });
-        }
+//         if (!userId) {
+//             return res.status(400).json({ message: 'User not authenticated' });
+//         }
 
-        await Like.findOneAndDelete({ user: userId, blog: id });
+//         await Like.findOneAndDelete({ user: userId, blog: id });
 
-        await Blog.findByIdAndUpdate(id, { $inc: { likesCount: -1 } });
+//         await Blog.findByIdAndUpdate(id, { $inc: { likesCount: -1 } });
 
-        res.json({ message: 'Blog post unliked successfully' });
-    } catch (err) {
-        console.error('Error unliking blog post:', err);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
+//         res.json({ message: 'Blog post unliked successfully' });
+//     } catch (err) {
+//         console.error('Error unliking blog post:', err);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
 
 export const getLikesForPost = async (req: Request, res: Response) => {
     try {
@@ -77,7 +77,7 @@ export const getLikesForPost = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Blog post not found' });
         }
 
-        res.json({ likesCount: blog.likesNo, usernames });
+        res.json({ likesNumber: blog.likesNo, usernames });
     } catch (err) {
         console.error('Error getting likes:', err);
         res.status(500).json({ message: 'Internal server error' });

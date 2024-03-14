@@ -1,6 +1,6 @@
 import express from 'express';
 import { likePost, getLikesForPost} from '../controllers/likeController';
-import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
+import { authenticateToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -13,10 +13,11 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/likes/{id}:
+ * /likes/{id}:
  *   post:
  *     summary: Like a blog post
  *     tags: [Likes]
+ *     description: Like a blog.
  *     parameters:
  *       - in: path
  *         name: id
@@ -38,10 +39,11 @@ router.post('/:id', authenticateToken, likePost);
 
 /**
  * @swagger
- * /api/likes/{id}:
+ * /likes/{id}:
  *   get:
  *     summary: Get all likes for a blog post
  *     tags: [Likes]
+ *     description: Get all likes for a blog.
  *     parameters:
  *       - in: path
  *         name: id

@@ -3,14 +3,6 @@ import { Blog } from "../models/Blog";
 import { blogSchema } from "../utils/validation";
 import multer from "multer";
 import path from "path";
-// import Subscription from '../models/subscriptionModel';
-// import { sendEmailToSubscribers } from '../services/emailService';
-
-// cloudinary.config({
-//     cloud_name: process.env.CLOUD_NAME || 'your_cloud_name',
-//     api_key: process.env.API_KEY || 'your_api_key',
-//     api_secret: process.env.API_SECRET || 'your_api_secret'
-// });
 
 // Set up storage for image uploads
 const storage = multer.diskStorage({
@@ -50,9 +42,7 @@ export const createBlog = async (req: Request, res: Response) => {
       });
       await newBlog.save();
 
-      // const subscribers = await Subscription.find();
-      // await sendEmailToSubscribers(subscribers);
-
+     
       res
         .status(201)
         .json({ message: "Blog post created successfully", blog: newBlog });

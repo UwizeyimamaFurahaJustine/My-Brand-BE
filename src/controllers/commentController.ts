@@ -9,7 +9,7 @@ interface AuthRequest extends Request {
 
 export const addComment = async (req: AuthRequest, res: Response) => {
     try {
-        console.log(req);
+        
         
         const { text } = req.body;
         const { id: blogId } = req.params; // Extract blogId from request parameters
@@ -43,7 +43,7 @@ export const getCommentsForBlog = async (req: Request, res: Response) => {
     try {
         const { id: blogId } = req.params;
 
-        console.log('Requested blogId:', blogId);
+        
 
         const blog = await Blog.findById(blogId);
         if (!blog) {
