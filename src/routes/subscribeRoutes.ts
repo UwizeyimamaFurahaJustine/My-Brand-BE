@@ -13,20 +13,19 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Subscribe
+ *   name: Subscription
  *   description: NewsLetter subscriptions
  */
 
 /**
  * @swagger
- * /subscribe:
+ * /api/subscriptions:
  *   post:
  *     summary: Subsribe to a newsletter
- *     tags: [Subscribe]
- *     description: Send your email to subscribe to our newsletters.
+ *     tags: [Subscription]
  *     requestBody:
- *       required: true
- *       content:
+ *      required: true
+ *      content:
  *         application/json:
  *            schema:
  *              type: object
@@ -47,11 +46,11 @@ router.post("/", addSubscription);
 
 /**
  * @swagger
- * /subscribe:
+ * /api/subscriptions:
  *   get:
  *     summary: Get all newsletter subscriptions
- *     tags: [Subscribe]
- *     description: List of subscribers.
+ *     tags: [Subscription]
+ *
  *     responses:
  *       200:
  *         description: Newsletter subscriptions

@@ -7,7 +7,7 @@ interface AuthRequest extends Request {
     user?: { email: string; username: string };
 }
 
-export const likeBlog = async (req: AuthRequest, res: Response) => {
+export const likePost = async (req: AuthRequest, res: Response) => {
     try {
         
         const { id: blogId }= req.params;
@@ -15,7 +15,7 @@ export const likeBlog = async (req: AuthRequest, res: Response) => {
         const email = req.user?.email;
         const user = await User.findOne({ email }); // find user by their email 
         
-        // console.log(user);
+        console.log(user);
         const userId = user;
         const username = req.user?.username;
 
@@ -28,13 +28,10 @@ export const likeBlog = async (req: AuthRequest, res: Response) => {
             return res.status(400).json({ message: 'You already liked this post' });
         }
 
-        const newLike = new Like({ 
-            user: userId,
-            username,
-            blog: blogId });
+        const newLike = new Like({ user: userId, username, blog: blogId });
         await newLike.save();
 
-        await Blog.findByIdAndUpdate(blogId, { $inc: { likesNo: 1 } });
+        await Blog.findByIdAndUpdate(blogId, { $inc: { likesCount: 1 } });
 
         res.json({ message: 'Blog post liked successfully' });
     } catch (err) {
@@ -43,24 +40,18 @@ export const likeBlog = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const unlikeBlog = async (req: AuthRequest, res: Response) => {
+export const unlikePost = async (req: AuthRequest, res: Response) => {
     try {
-        const { id: blogId }= req.params;
-        
-        const email = req.user?.email;
-        const user = await User.findOne({ email }); // find user by their email 
-        
-        console.log(user);
-        const userId = user;
-        // const username = req.user?.username;
+        const { id } = req.params;
+        const userId = req.user?.email;
 
         if (!userId) {
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({ message: 'User not authenticated' });
         }
 
-        await Like.findOneAndDelete({ user: userId, blog: blogId });
+        await Like.findOneAndDelete({ user: userId, blog: id });
 
-        await Blog.findByIdAndUpdate(blogId, { $inc: { likesNo: -1 } });
+        await Blog.findByIdAndUpdate(id, { $inc: { likesCount: -1 } });
 
         res.json({ message: 'Blog post unliked successfully' });
     } catch (err) {
@@ -69,7 +60,7 @@ export const unlikeBlog = async (req: AuthRequest, res: Response) => {
     }
 };
 
-export const getLikesForBlog = async (req: Request, res: Response) => {
+export const getLikesForPost = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -86,7 +77,7 @@ export const getLikesForBlog = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Blog post not found' });
         }
 
-        res.json({ likesNo: blog.likesNo, usernames });
+        res.json({ likesCount: blog.likesNo, usernames });
     } catch (err) {
         console.error('Error getting likes:', err);
         res.status(500).json({ message: 'Internal server error' });
