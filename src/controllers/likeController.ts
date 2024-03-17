@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import { Blog, IBlog } from '../models/Blog';
 import { Like } from '../models/Likes';
 import User from '../models/User';
@@ -40,25 +41,39 @@ export const likePost = async (req: AuthRequest, res: Response) => {
     }
 };
 
-// export const unlikePost = async (req: AuthRequest, res: Response) => {
-//     try {
-//         const { id } = req.params;
-//         const userId = req.user?.email;
 
-//         if (!userId) {
-//             return res.status(400).json({ message: 'User not authenticated' });
-//         }
 
-//         await Like.findOneAndDelete({ user: userId, blog: id });
+export const unlikePost = async (req: AuthRequest, res: Response) => {
+    try {
+        const { id: blogId } = req.params;
+        const email = req.user?.email;
+        const user = await User.findOne({ email });
 
-//         await Blog.findByIdAndUpdate(id, { $inc: { likesCount: -1 } });
+        if (!user) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
 
-//         res.json({ message: 'Blog post unliked successfully' });
-//     } catch (err) {
-//         console.error('Error unliking blog post:', err);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// };
+        const userId = user._id;
+
+        const like = await Like.findOneAndDelete({ user: userId, blog: blogId });
+
+        if (!like) {
+            return res.status(404).json({ message: 'Like not found or already removed' });
+        }
+
+        // Remove the username from the like
+        await Like.findByIdAndUpdate(like._id, { $unset: { username: 1 } });
+
+        await Blog.findByIdAndUpdate(blogId, { $inc: { likesNo: -1 } });
+
+        res.json({ message: 'Blog post unliked successfully' });
+    } catch (err) {
+        console.error('Error unliking blog post:', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
 
 export const getLikesForPost = async (req: Request, res: Response) => {
     try {
