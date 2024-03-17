@@ -7,6 +7,7 @@ interface IBlog extends Document {
     image: string;
     likesNo: number;
     commentsNo: number;
+    createdAt: string;
    
 }
 
@@ -15,7 +16,12 @@ const BlogSchema = new Schema({
     description: { type: String, required: true },
     image: {type: String, required: true},
     likesNo: { type: Number, default: 0, required: true },    
-    commentsNo: { type: Number, default: 0, required: true } ,
+    commentsNo: { type: Number, default: 0, required: true },
+    createdAt: { 
+        type: String, 
+        default: () => new Date().toString(),
+        immutable: true 
+    } 
    
 });
 

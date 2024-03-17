@@ -30,5 +30,17 @@ export const getMessages = async (req: Request, res: Response) => {
     }
 };
 
+// Delete a blog post by ID
+export const deleteMessage = async (req: Request, res: Response) => {
+    try {
+      const deletedMessage = await Message.findByIdAndDelete(req.params.id);
+      if (!deletedMessage) {
+        return res.status(404).json({ message: "Message not found" });
+      }
+      res.json({ message: "Message deleted" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
 
 

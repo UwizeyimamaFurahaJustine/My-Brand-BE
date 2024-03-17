@@ -5,6 +5,7 @@ interface IUser extends Document {
     email: string;
     password: string;
     role: string; // 'admin' or 'user'
+    createdAt: string; //
 }
 
 const UserSchema = new Schema({
@@ -12,6 +13,11 @@ const UserSchema = new Schema({
     email: String,
     password: String,
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
+    createdAt: { 
+        type: String, 
+        default: () => new Date().toString(),
+        immutable: true 
+    } 
 });
 
 export default model<IUser>('User', UserSchema);
