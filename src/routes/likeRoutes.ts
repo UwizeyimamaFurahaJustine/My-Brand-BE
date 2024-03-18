@@ -1,5 +1,5 @@
 import express from 'express';
-import { likePost, getLikesForPost, unlikePost} from '../controllers/likeController';
+import { likePost, getLikesForPost} from '../controllers/likeController';
 import { authenticateToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -36,30 +36,6 @@ const router = express.Router();
  *         description: Internal server error
  */
 router.post('/:id', authenticateToken, likePost);
-
-/**
- * @swagger
- * /likes/{id}:
- *   delete:
- *     summary: Unlike a blog post
- *     tags: [Likes]
- *     description: Unlike a previously liked blog post.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the blog post to unlike
- *     responses:
- *       200:
- *         description: Blog post unliked successfully
- *       404:
- *         description: Like not found or already removed
- *       500:
- *         description: Internal server error
- */
-router.delete('/:id', authenticateToken, unlikePost);
 
 /**
  * @swagger
