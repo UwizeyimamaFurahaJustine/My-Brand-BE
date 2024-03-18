@@ -1,3 +1,15 @@
+
+
+
+
+
+
+
+
+
+
+
+
 import express from 'express';
 import mongoose, { ConnectOptions } from 'mongoose';
 import bodyParser from 'body-parser';
@@ -8,9 +20,11 @@ import messageRoutes from './routes/messageRoutes';
 import userRoutes from './routes/userRoutes';
 import likeRoutes from './routes/likeRoutes';
 import commentRoutes from './routes/commentRoutes';
+import imageRoutes from './routes/imagesRoutes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import cors from 'cors';
+
 
 
 
@@ -31,6 +45,9 @@ app.use('/messages', messageRoutes);
 app.use('/users', userRoutes);
 app.use('/likes', likeRoutes);
 app.use('/comments', commentRoutes);
+
+// Serve static files from the "uploads" directory
+app.use('/images', imageRoutes);
 
 
 // Swagger setup
@@ -69,7 +86,7 @@ const swaggerOptions = {
   
   // Swagger setup
   const swaggerSpec = swaggerJsdoc(swaggerOptions);
-  app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Connect to MongoDB
 const mongoURI = process.env.MONGODB_URI;

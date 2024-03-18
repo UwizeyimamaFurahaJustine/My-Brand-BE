@@ -1,5 +1,5 @@
 import express from 'express';
-import { getMessages, sendMessage } from '../controllers/messageController';
+import { getMessages, sendMessage, deleteMessage } from '../controllers/messageController';
 import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -58,5 +58,6 @@ router.post('/', sendMessage);
  */
 
 router.get('/', authenticateToken, authorizeAdmin, getMessages);
+router.delete('/:id', authenticateToken, authorizeAdmin, deleteMessage);
 
 export default router; 

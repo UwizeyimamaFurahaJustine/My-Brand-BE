@@ -12,6 +12,21 @@ export const getUsers = async (req: Request, res: Response) => {
     }
 };
 
+// Get a single blog post by ID
+
+export const getSingleUser= async (req: Request, res: Response) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: "user not found" });
+      }
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+
 // Update a blog post by ID
 export const updateUser = async (req: Request, res: Response) => {
     try {

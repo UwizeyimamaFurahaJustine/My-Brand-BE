@@ -1,5 +1,6 @@
+
 import express from 'express';
-import { getUsers, updateUser, deleteUser } from '../controllers/userController';
+import { getUsers, updateUser, deleteUser,getSingleUser } from '../controllers/userController';
 import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -92,5 +93,29 @@ router.put('/:id', authenticateToken, authorizeAdmin, updateUser);
  */
 
 router.delete('/:id', authenticateToken, authorizeAdmin, deleteUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     tags: [Users] 
+ *     description: Retrieve a single user by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user
+ *     responses:
+ *       200:
+ *         description: A single user
+ *       404:
+ *         description: user not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/:id', authenticateToken, authorizeAdmin, getSingleUser);
 
 export default router;
