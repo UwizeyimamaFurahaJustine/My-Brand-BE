@@ -31,10 +31,7 @@ export const getSingleUser= async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
     try {
         // Validate request payload
-        const { error } = signupSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }
+       
 
         const { username, email, password } = req.body;
         const updatedFields: any = { username, email, password};

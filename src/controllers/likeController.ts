@@ -40,25 +40,36 @@ export const likePost = async (req: AuthRequest, res: Response) => {
     }
 };
 
-// export const unlikePost = async (req: AuthRequest, res: Response) => {
-//     try {
-//         const { id } = req.params;
-//         const userId = req.user?.email;
+export const unlikePost = async (req: AuthRequest, res: Response) => {
+    try {
+        const { id: blogId } = req.params;
+        const email = req.user?.email;
+        const user = await User.findOne({ email });
 
-//         if (!userId) {
-//             return res.status(400).json({ message: 'User not authenticated' });
-//         }
+        if (!user) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
 
-//         await Like.findOneAndDelete({ user: userId, blog: id });
+        const userId = user._id;
 
-//         await Blog.findByIdAndUpdate(id, { $inc: { likesCount: -1 } });
+        const like = await Like.findOneAndDelete({ user: userId, blog: blogId });
 
-//         res.json({ message: 'Blog post unliked successfully' });
-//     } catch (err) {
-//         console.error('Error unliking blog post:', err);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// };
+        if (!like) {
+            return res.status(404).json({ message: 'Like not found or already removed' });
+        }
+
+        // Remove the username from the like
+        await Like.findByIdAndUpdate(like._id, { $unset: { username: 1 } });
+
+        await Blog.findByIdAndUpdate(blogId, { $inc: { likesNo: -1 } });
+
+        res.json({ message: 'Blog post unliked successfully' });
+    } catch (err) {
+        console.error('Error unliking blog post:', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 
 export const getLikesForPost = async (req: Request, res: Response) => {
     try {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { likePost, getLikesForPost} from '../controllers/likeController';
+import { likePost, getLikesForPost,unlikePost} from '../controllers/likeController';
 import { authenticateToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -61,4 +61,30 @@ router.post('/:id', authenticateToken, likePost);
  */
 router.get('/:id', getLikesForPost);
 
+
+/**
+ * @swagger
+ * /likes/{id}:
+ *   delete:
+ *     summary: Delete likes for a blog post
+ *     tags: [Likes]
+ *     description: Delete likes for a blog.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the blog post
+ *     responses:
+ *       200:
+ *         description:Delete liked  blog post
+ *       404:
+ *         description: Blog post not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:id', authenticateToken, unlikePost);
+
 export default router;
+
