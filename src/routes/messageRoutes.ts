@@ -1,5 +1,5 @@
 import express from 'express';
-import { getMessages, sendMessage, deleteMessage } from '../controllers/messageController';
+import { getMessages, sendMessage } from '../controllers/messageController';
 import { authenticateToken, authorizeAdmin } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -58,29 +58,5 @@ router.post('/', sendMessage);
  */
 
 router.get('/', authenticateToken, authorizeAdmin, getMessages);
-
-/**
- * @swagger
- * /messages/{id}:
- *   delete:
- *     summary: Delete a message by ID
- *     tags: [Messages]
- *     description: Delete an existing message with the provided ID.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the message
- *     responses:
- *       200:
- *         description: message deleted
- *       404:
- *         description: messagenot found
- *       500:
- *         description: Internal server error
- */
-router.delete('/:id', authenticateToken, authorizeAdmin, deleteMessage);
 
 export default router; 

@@ -12,26 +12,17 @@ export const getUsers = async (req: Request, res: Response) => {
     }
 };
 
-export const getSingleUser = async (req: Request, res: Response) => {
-    try {
-      const user = await User.findById(req.params.id);
-      if (!user) {
-        return res.status(404).json({ message: "user not found" });
-      }
-      res.json(user);
-    } catch (err) {
-      res.status(500).json({ message: "Internal server error" });
-    }
-  };
-
 // Update a blog post by ID
 export const updateUser = async (req: Request, res: Response) => {
     try {
         // Validate request payload
-        
+        const { error } = signupSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
 
-        const { username, email } = req.body;
-        const updatedFields: any = { username, email};
+        const { username, email, password } = req.body;
+        const updatedFields: any = { username, email, password};
 
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updatedFields, { new: true });
         if (!updatedUser) {

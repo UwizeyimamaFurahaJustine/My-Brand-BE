@@ -4,9 +4,6 @@ import { blogSchema } from "../utils/validation";
 import multer from "multer";
 import path from "path";
 
-// Function to format date as desired string
-
-
 // Set up storage for image uploads
 const storage = multer.diskStorage({
   destination: function (req: Request, file: any, cb: Function) {
