@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 import express from 'express';
 import mongoose, { ConnectOptions } from 'mongoose';
 import bodyParser from 'body-parser';
@@ -30,7 +18,7 @@ import cors from 'cors';
 
 dotenv.config();
 
- export const app = express();
+export const app = express();
 const PORT = process.env.PORT;
 
 // Middleware
